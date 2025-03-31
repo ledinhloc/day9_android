@@ -18,13 +18,13 @@ public class ViewPager2Adapter extends FragmentStateAdapter {
             case 0:
                 return new NeworderFragment();
             case 1:
-                return new NeworderFragment();
+                return new PickupFragment();
             case 2:
-                return new NeworderFragment();
+                return new DeliveryFragment();
             case 3:
-                return new NeworderFragment();
+                return new DanhGiaFragment();
             case 4:
-                return new NeworderFragment();
+                return new CancelFragment();
             default:
                 return new NeworderFragment();
         }
@@ -33,6 +33,6 @@ public class ViewPager2Adapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 1;
+        return 5;
     }
 }
