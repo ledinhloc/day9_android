@@ -9,12 +9,14 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 public class ImagesViewPager2Adapter extends RecyclerView.Adapter<ImagesViewPager2Adapter.ImagesViewHolder>{
-    private List<Images> imagesList;
+    private List<ImagesSlider> imagesList;
 
-    public ImagesViewPager2Adapter(List<Images> imagesList) {
+    public ImagesViewPager2Adapter(List<ImagesSlider> imagesList) {
         this.imagesList = imagesList;
     }
 
@@ -28,15 +30,20 @@ public class ImagesViewPager2Adapter extends RecyclerView.Adapter<ImagesViewPage
     @Override
     public void onBindViewHolder(@NonNull ImagesViewHolder holder, int position) {
         //set
-        Images images = imagesList.get(position);
-        if(images == null){
-            return;
-        }
-        holder.imageView.setImageResource(images.getImagesId());
+        //Images images = imagesList.get(position);
+//        if(images == null){
+//            return;
+//        }
+        //holder.imageView.setImageResource(images.getImagesId());
+        Glide.with(holder.imageView.getContext())
+                .load(imagesList.get(position).getAvatar())
+                .into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
+        if (imagesList != null)
+            return imagesList.size();
         return 0;
     }
 

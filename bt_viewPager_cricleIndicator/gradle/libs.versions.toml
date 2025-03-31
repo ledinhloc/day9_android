@@ -10,7 +10,9 @@ constraintlayout = "2.2.1"
 circleindicator="2.1.6"
 autoimageslider="1.4.0"
 glide="4.14.2"
-
+converterGson = "2.9.0"
+gson = "2.9.0"
+retrofit = "2.9.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -24,6 +26,8 @@ circleindicator = { group = "me.relex", name = "circleindicator", version.ref = 
 autoimageslider = { group = "com.github.smarteist", name = "Android-Image-Slider", version.ref = "autoimageslider" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 glideCompiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+converterGson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "converterGson" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

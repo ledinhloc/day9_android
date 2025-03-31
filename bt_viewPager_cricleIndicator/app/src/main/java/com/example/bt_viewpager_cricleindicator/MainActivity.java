@@ -19,12 +19,16 @@ import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator;
 import me.relex.circleindicator.CircleIndicator3;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
     private ViewPager2 viewPager2;
     private CircleIndicator3 circleIndicator3;
-    private List<Images> imagesList;
+    ImagesViewPager2Adapter adapter;
+    private List<ImagesSlider> imagesList;
 
     private SliderView sliderView;
     private ArrayList<Integer> arrayList;
@@ -57,33 +61,36 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        //cách 1: viewPager circleIndicator
         viewPager2 = findViewById(R.id.viewpage2);
         circleIndicator3 = findViewById(R.id.circle_indicator3);
 
-        imagesList = getListImages();
-        ImagesViewPager2Adapter adapter = new ImagesViewPager2Adapter(imagesList);
+        //imagesList = getListImages();
+        imagesList = new ArrayList<>();
+        getListImages();
+        adapter = new ImagesViewPager2Adapter(imagesList);
         viewPager2.setAdapter(adapter);
-
         circleIndicator3.setViewPager(viewPager2);
 
-        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                handler.removeCallbacks(runnable);
-                handler.postDelayed(runnable, 3000);
-            }
-        });
-
+//        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+//            @Override
+//            public void onPageSelected(int position) {
+//                super.onPageSelected(position);
+//                handler.removeCallbacks(runnable);
+//                handler.postDelayed(runnable, 3000);
+//            }
+//        });
+        viewPager2.registerOnPageChangeCallback(pageChangeCallback);
         viewPager2.setPageTransformer(new DepthPageTransformer());
 
-
+        //cách 2 sliderView
         sliderView = findViewById(R.id.imageSlider);
         arrayList = new ArrayList<>();
         arrayList.add(R.drawable.shoppe1);
         arrayList.add(R.drawable.shoppe2);
         arrayList.add(R.drawable.shoppe3);
         arrayList.add(R.drawable.shoppe4);
+        //getData();
 
         sliderAdapter = new SliderAdapter(getApplicationContext(), arrayList);
         sliderView.setSliderAdapter(sliderAdapter);
@@ -92,17 +99,58 @@ public class MainActivity extends AppCompatActivity {
         sliderView.setIndicatorSelectedColor(getResources().getColor(R.color.red));
         sliderView.startAutoCycle();
         sliderView.setScrollTimeInSec(5);
+    }
 
+//    private void getData() {
+//        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+//        Call<MessageModel> call = apiService.lo
+//    }
+
+//    private List<Images> getListImages() {
+//        List<Images> list = new ArrayList<>();
+//        list.add(new Images(R.drawable.quangcao));
+//        list.add(new Images(R.drawable.coffee));
+//        list.add(new Images(R.drawable.coffee2));
+//        list.add(new Images(R.drawable.monan));
+//        return list;
+//    }
+    private void getListImages(){
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        Call<MessageModel> call = apiService.LoadImageSlider(1);
+        call.enqueue(new Callback<MessageModel>() {
+            @Override
+            public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    MessageModel messageModel = response.body();
+
+                    imagesList.clear();
+                    imagesList.addAll(messageModel.getResult());
+                    adapter.notifyDataSetChanged();
+                    circleIndicator3.setViewPager(viewPager2);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MessageModel> call, Throwable t) {
+
+            }
+        });
 
     }
 
-    private List<Images> getListImages() {
-        List<Images> list = new ArrayList<>();
-        list.add(new Images(R.drawable.quangcao));
-        list.add(new Images(R.drawable.coffee));
-        list.add(new Images(R.drawable.coffee2));
-        list.add(new Images(R.drawable.monan));
-        return list;
-    }
+    private ViewPager2.OnPageChangeCallback pageChangeCallback = new ViewPager2.OnPageChangeCallback() {
+        @Override
+        public void onPageSelected(int position) {
+            super.onPageSelected(position);
+            handler.removeCallbacks(runnable);
+            handler.postDelayed(runnable, 3000);
+        }
+    };
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        handler.removeCallbacks(runnable);
+        viewPager2.unregisterOnPageChangeCallback(pageChangeCallback);
+    }
 }

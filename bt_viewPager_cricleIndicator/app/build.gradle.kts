@@ -40,6 +40,9 @@ dependencies {
     implementation(libs.circleindicator)
     implementation(libs.autoimageslider)
     implementation(libs.glide)
+    implementation(libs.retrofit) // Retrofit core
+    implementation(libs.converterGson) // Convert JSON sang Object Java
+
     annotationProcessor(libs.glideCompiler)
 
     testImplementation(libs.junit)

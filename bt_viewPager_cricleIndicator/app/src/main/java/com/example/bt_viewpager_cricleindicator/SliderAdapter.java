@@ -29,10 +29,10 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderHolder>
 
     @Override
     public void onBindViewHolder(SliderHolder viewHolder, int position) {
-//        Glide.with(context)
-//                .load(arrayList.get(position))
-//                .into(viewHolder.imageView);
-        viewHolder.imageView.setImageResource(arrayList.get(position));
+        Glide.with(context)
+                .load(arrayList.get(position))
+                .into(viewHolder.imageView);
+      //  viewHolder.imageView.setImageResource(arrayList.get(position).getAvatar());
     }
 
     @Override
